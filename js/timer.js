@@ -117,11 +117,12 @@
         var rests = document.getElementsByClassName('partials__rest');
 
         for (var it = 0; it < works.length; it++) {
-            tempTimer.circles.workouts.push({"work": parseInt(works[it].value)});
-            tempTimer.circles.workouts.push({"rest": parseInt(rests[it].value)});
+            tempTimer.program.workouts.push({"work": parseInt(works[it].value)});
+            tempTimer.program.workouts.push({"rest": parseInt(rests[it].value)});
         }
 
         timers.push(tempTimer);
+        localStorage.setItem('timers', JSON.stringify(timers));
 
         console.log(timers);
 
@@ -129,7 +130,7 @@
 
     addWork.addEventListener('click', function (e) {
         e.preventDefault();
-        timer.add();
+        Timer.prototype.add();
     }, false);
-    
+
 }());
