@@ -1,3 +1,5 @@
+@import url("http://fonts.googleapis.com/css?family=Gloria+Hallelujah")
+
 *
   -webkit-box-sizing: border-box
   -moz-box-sizing: border-box
@@ -10,8 +12,82 @@
 
 html, body
   height: 100%
-  font: normal 16px "Arial", Verdana, Tahoma
+  font: normal 16px 'Gloria Hallelujah', cursive
 
-.b-page
+h1, h2, h3, h4, h5, h6
+  margin 0 0 10px
+  line-height 1.2
+
+.page
   position: relative
   min-height: 100%
+  padding 20px
+  background #bdc3c7
+
+  &__title
+    color #f1c40f
+    font-size 2.4em
+    text-shadow 1px 1px 2px rgba(0,0,0,.4)
+
+.controls 
+  padding 50px 0 0
+
+  &__name-block
+
+    &_hidden
+      display none
+
+  &__create
+    box-shadow 5px 5px 10px 2px rgba(0,0,0,.4)
+    border 0
+    width 200px
+    padding 13px 0
+    background #2c3e50
+    color #fff
+    font-weight bold
+    line-height 1
+    outline none
+    display block
+    margin 20px 0 0
+
+    &:hover
+      background #34495e
+
+    &:active
+      position relative
+      top 2px
+      left 2px
+      box-shadow 4px 4px 10px 2px rgba(0,0,0,.6)
+
+.partials
+  display none
+  width 500px
+
+  &_visible
+    display block
+  
+  &__timer-name
+    font-size 20px
+    font-weight bold
+
+  &__label
+    display block
+    padding 5px 0
+
+  &__name
+    float left
+    margin-right 10px
+    min-width: 80px
+
+  &__input
+    overflow hidden
+    padding 0 20px
+    width 200px
+  
+  &__divider
+    width 452px
+    margin 10px 0
+    border-top 1px dashed #000
+
+  &__content
+    padding-bottom 10px

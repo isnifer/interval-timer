@@ -8,9 +8,54 @@
 </head>
 <body>
 
-    
+    <div class="page">
+        
+        <h2 class="page__title">Create your own timer</h2>
+
+        <div class="controls">
+            <div class="controls__form">
+                
+                <div class="controls__name-block">
+                    <input type="text" name="timer-name" class="controls__timer-name" />
+                    <button class="controls__create">Я выбрал имя</button>
+                </div>
+
+                <div class="partials">
+                    <p class="partials__timer-name">
+                        Таймер: <span class="partials__timer-user-name"></span>
+                    </p>
+                    <div class="partials__content">
+                        <label class="partials__label">
+                            <span class="partials__name">Количество кругов: </span>
+                            <input type="text" name="circle-num" class="partials__input partials__circle">
+                        </label>
+                        <div class="partials__divider">
+                            Содержимое круга:
+                        </div>
+                        <label class="partials__label">
+                            <span class="partials__name">work (s)</span>
+                            <input type="text" name="work_0" class="partials__input partials__work">
+                        </label>
+                        <label class="partials__label">
+                            <span class="partials__name">rest (s)</span>
+                            <input type="text" name="rest_0" class="partials__input partials__rest">
+                        </label>
+                    </div>
+                    <button class="partials__add">Добавить</button>
+                    <button class="partials__submit">Сохранить таймер</button>
+                    <button class="partials__reset">Создать новый</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="timers">
+            <ul class="timers__list"></ul>
+        </div>
+
+    </div>
 
     <script src="js/timer.js"></script>
   
-</body>
+    <body>
 </html>
