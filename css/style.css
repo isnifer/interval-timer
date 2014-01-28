@@ -1,0 +1,4 @@
+*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+.g-clf:after,.g-clf:before{clear:both;display:table;content:""}
+html,body{height:100%;font:normal 16px "Arial",Verdana,Tahoma}
+.b-page{position:relative;min-height:100%}
