@@ -4,6 +4,7 @@
     var save = document.querySelector('.partials__save');
     var reset = document.querySelector('.partials__reset');
     var view = document.querySelector('.partials__view');
+    var local = document.querySelector('.partials__local');
     var form = document.querySelector('.controls__form');
     var partials = document.querySelector('.partials');
     var partialsForm = document.querySelector('.partials__content');
@@ -32,6 +33,8 @@
     function Timer (options) {
         
         this.name = options.name || 'Press';
+        this.program = (options.program) ? options.program : {};
+        this.constructor = (constructor) ? constructor : options.constructor;
         this.date = (function () {
             
             if (options.date) {
@@ -46,6 +49,14 @@
         }());
 
     }
+
+    Timer.prototype.createLocalTimer = function (options) {
+        return new Timer ({
+            name: options.name,
+            program: options.program,
+            constructor: Timer
+        });
+    };
 
     Timer.prototype.add = function () {
         
@@ -117,6 +128,7 @@
         timerList.appendChild(elem);
 
         view.setAttribute('id', 'view-timer_' + id);
+        local.setAttribute('id', 'local-timer_' + id);
         currentTimer.reset.setAttribute('id', 'reset-timer_' + id);
         currentTimer.start.setAttribute('id', 'start-timer_' + id);
     };
@@ -356,6 +368,9 @@
 
         tempTimer.pushToDOM(tempTimer.name, timers.length - 1);
 
+        view.disabled = false;
+        local.disabled = false;
+
     }, false);
 
     addWork.addEventListener('click', function (e) {
@@ -379,5 +394,64 @@
 
     view.addEventListener('click', resetOrLoadData, false);
     currentTimer.reset.addEventListener('click', resetOrLoadData, false);
+
+    local.addEventListener('click', function () {
+        var id = this.getAttribute('id');
+        id = id.substring(id.indexOf('_') + 1);
+
+        var tmpArray;
+        
+        var timer = {
+            name: timers[id].name,
+            program: timers[id].program
+        };
+
+        var localTimers = [];
+        localTimers.push(JSON.stringify(timer));
+
+        if (!localStorage.timers) {
+            localStorage.setItem('timers', JSON.stringify(localTimers));
+            console.log('Success save');
+        } else {
+            tmpArray = JSON.parse(localStorage.timers);
+            tmpArray.push(JSON.stringify(timer));
+            localStorage.setItem('timers', JSON.stringify(tmpArray));
+            console.log('Success Resave');
+        }
+
+        console.log(localStorage.timers);
+
+    }, false);
+
+    var init = (function () {
+
+        if (localStorage.timers) {
+
+            var localData = localStorage.timers,
+                k = 0;
+            
+            localData = JSON.parse(localData);
+
+            for (k; k < localData.length; k++) {
+
+                var localItem = JSON.parse(localData[k]);
+
+                timers[timers.length] = Timer.prototype.createLocalTimer({
+                    name: localItem.name,
+                    program: localItem.program
+                });
+
+                var item = document.createElement('li');
+                item.classList.add('timers__item');
+                item.setAttribute('id', 'timer_' + timers.length);
+                item.textContent = localItem.name;
+
+                timerList.appendChild(item);
+
+            }
+
+        }
+
+    }());
 
 }());
