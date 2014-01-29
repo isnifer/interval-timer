@@ -194,14 +194,26 @@
         var time = workouts[index].value;
         currentTimer.actionTitle.textContent = workouts[index].title;
         var timer = setInterval(function () {
-            time -= 1; 
-            currentTimer.time.textContent = (function () {
-                if (time < 60 && time >= 10) {
-                    return '00:' + time;
-                } else {
-                    return '00:0' + time;
-                }
+            currentTimer.time.textContent = (function () {    
+                var minutes = (function () {
+                    var tmpMinutes = parseInt(time / 60);
+                    if (tmpMinutes < 10) {
+                        return '0' + tmpMinutes;
+                    }
+                    return tmpMinutes;
+                }());
+
+                var seconds = (function () {
+                    var tmpSeconds = time - parseInt(minutes) * 60;
+                    if (tmpSeconds < 10) {
+                        return '0' + tmpSeconds;
+                    }
+                    return tmpSeconds;
+                }());
+
+                return minutes + ':' + seconds;
             }());
+            time -= 1; 
             if (time === 0) { 
 
                 clearInterval(timer);
