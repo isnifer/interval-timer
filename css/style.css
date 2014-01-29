@@ -20,10 +20,9 @@ h1,h2,h3,h4,h5,h6{margin:0 0 10px;line-height:1.2}
 .partials__content{padding-bottom:10px}
 .timers{padding:20px 0;}
 .timers__list{margin:0;padding:0;list-style:none}
-.timers__item{position:relative;margin:0 0 0 15px;border-bottom:1px dashed #000;display:inline-block;font-weight:bold;font-size:1.4em;}
-.timers__item:after,.timers__item:before{left:-15px;top:50%;border:solid transparent;content:"";height:0;width:0;position:absolute;pointer-events:none}
-.timers__item:after{border-color:rgba(136,183,213,0);border-left-color:#88b7d5;border-width:5px;margin-top:-5px}
-.timers__item:before{border-color:rgba(194,225,245,0);border-left-color:#c2e1f5;border-width:8px;margin-top:-8px}
+.timers__item{position:relative;font-weight:bold;font-size:1.4em}
+.timers__name{cursor:pointer;}
+.timers__name:hover{color:#c0392b}
 .current{width:498px;background:#2c3e50;padding:10px;border-radius:5px;display:block;}
 .current_visible{display:block}
 .current__header{font-size:3em;color:#f1c40f;line-height:1;text-align:center;padding:0 0 10px;font-weight:bold;text-shadow:1px 1px 2px #000;-webkit-font-smoothing:antialiased}

@@ -120,12 +120,8 @@
     };
 
     Timer.prototype.pushToDOM = function (name, id) {
-        var elem = document.createElement('li');
-        elem.classList.add('timers__item');
-        elem.setAttribute('id', 'timer_' + id);
-        elem.textContent = name;
-
-        timerList.appendChild(elem);
+        
+        pushLocalTimerToList(id, name);
 
         view.setAttribute('id', 'view-timer_' + id);
         local.setAttribute('id', 'local-timer_' + id);
@@ -441,17 +437,35 @@
                     program: localItem.program
                 });
 
-                var item = document.createElement('li');
-                item.classList.add('timers__item');
-                item.setAttribute('id', 'timer_' + timers.length);
-                item.textContent = localItem.name;
-
-                timerList.appendChild(item);
+                pushLocalTimerToList(timers.length - 1, localItem.name);
 
             }
 
         }
 
     }());
+
+    function startFromList () {
+        var id = this.id.substring(this.id.indexOf('_') + 1);
+        timers[id].load();
+        currentTimer.reset.setAttribute('id', 'reset-timer_' + id);
+        currentTimer.start.setAttribute('id', 'start-timer_' + id);
+    }
+
+    function pushLocalTimerToList (id, name) {
+        var item = document.createElement('li'),
+            itemName = document.createElement('span');
+
+        item.classList.add('timers__item');
+        item.setAttribute('id', 'timer_' + id);
+        itemName.classList.add('timers__name');
+        itemName.textContent = name;
+        item.appendChild(itemName);
+
+        timerList.appendChild(item);
+
+        item.addEventListener('click', startFromList, false);
+
+    }
 
 }());
