@@ -1,13 +1,27 @@
 (function () {
     
     var create = document.querySelector('.controls__create');
-    var save = document.querySelector('.partials__submit');
+    var save = document.querySelector('.partials__save');
     var reset = document.querySelector('.partials__reset');
+    var view = document.querySelector('.partials__view');
     var form = document.querySelector('.controls__form');
     var partials = document.querySelector('.partials');
     var partialsForm = document.querySelector('.partials__content');
     var addWork = document.querySelector('.partials__add');
     var welcomeBlock = document.querySelector('.controls__name-block');
+    var timerList = document.querySelector('.timers__list');
+    var timerItem = document.getElementsByClassName('timers__item');
+    var currentTimer = {
+        el: document.querySelector('.current'),
+        header: document.querySelector('.current__header'),
+        actionTitle: document.querySelector('.current__action-title-current'),
+        time: document.querySelector('.current__time'),
+        elapsed: document.querySelector('.current__elapsed-time'),
+        remaining: document.querySelector('.current__remaining-time'),
+        circle: document.querySelector('.current__circles-this'),
+        circles: document.querySelector('.current__circles-all'),
+        start: document.querySelector('.current__start')
+    };
     var i = 1, j = 1;
 
     var timers = [];
@@ -91,6 +105,62 @@
 
     };
 
+    Timer.prototype.pushToDOM = function (name, id) {
+        var elem = document.createElement('li');
+        elem.classList.add('timers__item');
+        elem.setAttribute('id', 'timer_' + id);
+        elem.textContent = name;
+
+        timerList.appendChild(elem);
+
+        view.setAttribute('id', 'view-timer_' + id);
+        currentTimer.start.setAttribute('id', 'start-timer_' + id);
+    };
+
+    // Transform data from timer and load to DOM
+    Timer.prototype.load = function () {
+        var self = this;
+
+        currentTimer.header.textContent = this.name;
+        currentTimer.circles.textContent = this.program.circles;
+        currentTimer.circle.textContent = 1;
+        currentTimer.actionTitle.textContent = this.program.workouts[0].title;
+        currentTimer.time.textContent = (function () {
+            var time = self.program.workouts[0].value;
+            if (time < 60 && time > 10) {
+                return '00:' + time;
+            } else {
+                return '00:0' + time;
+            }
+        }());
+        
+    };
+
+    Timer.prototype.start = function () {
+        var time = this.program.workouts[0].value;
+        var timer = setInterval(function () {
+            time -= 1; 
+            currentTimer.time.textContent = (function () {
+                if (time < 60 && time >= 10) {
+                    return '00:' + time;
+                } else {
+                    return '00:0' + time;
+                }
+            }());
+            if (time === 0) { 
+                clearInterval(timer); 
+            }
+        }, 1000);
+    };
+
+    Timer.prototype.pause = function (id) {
+
+    };
+
+    Timer.prototype.reset = function (id) {
+
+    };
+
     create.addEventListener('click', function (e) {
         e.preventDefault();
 
@@ -117,20 +187,34 @@
         var rests = document.getElementsByClassName('partials__rest');
 
         for (var it = 0; it < works.length; it++) {
-            tempTimer.program.workouts.push({"work": parseInt(works[it].value)});
-            tempTimer.program.workouts.push({"rest": parseInt(rests[it].value)});
+            tempTimer.program.workouts.push({"title": "work", "value": parseInt(works[it].value)});
+            tempTimer.program.workouts.push({"title": "rest", "value": parseInt(rests[it].value)});
         }
 
         timers.push(tempTimer);
-        localStorage.setItem('timers', JSON.stringify(timers));
+
+        tempTimer.pushToDOM(tempTimer.name, timers.length - 1);
 
         console.log(timers);
+        console.log(timerItem);
 
     }, false);
 
     addWork.addEventListener('click', function (e) {
         e.preventDefault();
         Timer.prototype.add();
+    }, false);
+
+    currentTimer.start.addEventListener('click', function () {
+        var id = this.getAttribute('id');
+        id = id.substring(id.indexOf('_') + 1);
+        timers[id].start();
+    }, false);
+
+    view.addEventListener('click', function () {
+        var id = this.getAttribute('id');
+        id = id.substring(id.indexOf('_') + 1);
+        timers[id].load();
     }, false);
 
 }());

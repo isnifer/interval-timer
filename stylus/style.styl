@@ -1,4 +1,4 @@
-@import url("http://fonts.googleapis.com/css?family=Gloria+Hallelujah")
+@import url("http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic")
 
 *
   -webkit-box-sizing: border-box
@@ -12,7 +12,7 @@
 
 html, body
   height: 100%
-  font: normal 16px 'Gloria Hallelujah', cursive
+  font: normal 16px 'PT Sans', sans-serif
 
 h1, h2, h3, h4, h5, h6
   margin 0 0 10px
@@ -91,3 +91,82 @@ h1, h2, h3, h4, h5, h6
 
   &__content
     padding-bottom 10px
+
+.current
+  width 400px
+  background #2c3e50
+  padding 10px
+  border-radius 5px
+  display block
+
+  &_visible
+    display block
+
+  &__header
+    font-size 3em
+    color #f1c40f
+    line-height 1
+    text-align center
+    padding 0 0 10px
+    font-weight bold
+    text-shadow 1px 1px 2px #000
+    -webkit-font-smoothing: antialiased
+
+  &__action-title
+    color #fff
+    font-weight bold
+    font-size 1.5em
+    text-align center
+
+    &-current
+      color rgba(211, 84, 0,1.0)
+
+  &__time
+    font-size 8em
+    text-align center
+    font-weight bold
+    color #27ae60
+    margin 20px 0 10px
+
+    &_small
+      color #c0392b
+  
+  &__circles
+    color #fff
+    font-weight bold
+    font-size 2em
+    padding-bottom 20px
+    text-align center
+
+    &-this
+      color #c0392b
+
+    &-all
+      color #27ae60
+
+  &__footer
+    text-align center
+
+  &__elapsed
+    width calc(50% - 10px)
+    display inline-block
+    vertical-align top
+    color #fff
+
+    &-time
+      color #27ae60
+      font-size 2em
+
+  &__remaining
+    width calc(50% - 10px)
+    display inline-block
+    color #fff
+
+    &-time
+      color #c0392b
+      font-size 2em
+
+  &__footer-title
+    font-size 20px
+    line-height 1
+    margin 0 0 20px
