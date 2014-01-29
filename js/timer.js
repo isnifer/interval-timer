@@ -154,16 +154,10 @@
         }());
 
         currentTimer.remaining.textContent = (function () {
-            var arr = self.program.workouts,
-                arrLen = arr.length,
-                allTime = 0;
-
-            for (var it = 0; it < arrLen; it++) {
-                allTime = allTime + arr[it].value;
-            }
+            var allTime = self.program.alltime;
 
             var minutes = (function () {
-                var tmpMinutes = parseInt(allTime * self.program.circles / 60);
+                var tmpMinutes = parseInt(allTime / 60);
                 if (tmpMinutes < 10) {
                     return '0' + tmpMinutes;
                 }
@@ -171,7 +165,7 @@
             }());
 
             var seconds = (function () {
-                var tmpSeconds = allTime * self.program.circles - parseInt(minutes) * 60;
+                var tmpSeconds = allTime - parseInt(minutes) * 60;
                 if (tmpSeconds < 10) {
                     return '0' + tmpSeconds;
                 }
@@ -242,11 +236,73 @@
     };
 
     Timer.prototype.changeElapsed = function () {
+        var time = 0,
+            self = this,
+            allTime = self.program.alltime;
+
+        var k = setInterval(function () {
+            var minutes = (function () {
+                var tmpMinutes = parseInt(time / 60);
+                if (tmpMinutes < 10) {
+                    return '0' + tmpMinutes;
+                }
+                return tmpMinutes;
+            }());
+
+            var seconds = (function () {
+                var tmpSeconds = time - parseInt(minutes) * 60;
+                if (tmpSeconds < 10) {
+                    return '0' + tmpSeconds;
+                }
+                return tmpSeconds;
+            }());
+
+            currentTimer.elapsed.textContent = minutes + ':' + seconds;
+
+            if (time < self.program.alltime) {
+                time += 1;
+            } else {
+                clearInterval(k);
+                k = null;
+            }
+
+        }, 1000);
 
     };
 
     Timer.prototype.changeRemaining = function () {
-        
+        var self = this,
+            allTime = self.program.alltime;
+
+        var k = setInterval(function () {
+
+            var minutes = (function () {
+                var tmpMinutes = parseInt(allTime / 60);
+                if (tmpMinutes < 10) {
+                    return '0' + tmpMinutes;
+                }
+                return tmpMinutes;
+            }());
+
+            var seconds = (function () {
+                var tmpSeconds = allTime - parseInt(minutes) * 60;
+                if (tmpSeconds < 10) {
+                    return '0' + tmpSeconds;
+                }
+                return tmpSeconds;
+            }());
+
+            currentTimer.remaining.textContent = minutes + ':' + seconds;
+
+
+            if (allTime !== 0) {
+                allTime -= 1;
+            } else {
+                clearInterval(k);
+                k = null;
+            }
+
+        }, 1000);
     };
 
     create.addEventListener('click', function (e) {
@@ -268,7 +324,8 @@
 
         tempTimer.program = {
             "circles": parseInt(document.querySelector('.partials__circle').value),
-            "workouts": []
+            "workouts": [],
+            "alltime": ""
         };
 
         var works = document.getElementsByClassName('partials__work');
@@ -279,7 +336,23 @@
             tempTimer.program.workouts.push({"title": "rest", "value": parseInt(rests[it].value)});
         }
 
+        tempTimer.program.alltime = (function () {
+
+            var arr = tempTimer.program.workouts,
+                arrLen = arr.length,
+                allTime = 0;
+
+            for (var it = 0; it < arrLen; it++) {
+                allTime = allTime + arr[it].value;
+            }
+
+            return allTime * tempTimer.program.circles;
+
+        }());
+
         timers.push(tempTimer);
+
+        console.log(timers);
 
         tempTimer.pushToDOM(tempTimer.name, timers.length - 1);
 
@@ -294,6 +367,8 @@
         var id = this.getAttribute('id');
         id = id.substring(id.indexOf('_') + 1);
         timers[id].start();
+        timers[id].changeElapsed();
+        timers[id].changeRemaining();
     }, false);
 
     function resetOrLoadData () {
