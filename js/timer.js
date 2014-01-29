@@ -23,7 +23,8 @@
         circles: document.querySelector('.current__circles-all'),
         start: document.querySelector('.current__start'),
         pause: document.querySelector('.current__pause'),
-        reset: document.querySelector('.current__reset')
+        reset: document.querySelector('.current__reset'),
+        audio: document.querySelector('.current__audio')
     };
 
     var i = 1, j = 1;
@@ -154,7 +155,7 @@
                 return minutes + ':' + seconds;
             } else if (time < 600 && time >= 60) {
                 return '0' + minutes + ':' + seconds;
-            } else if (time < 60 && time > 10) {
+            } else if (time < 60 && time >= 10) {
                 return '00:' + time;
             } else {
                 return '00:0' + time;
@@ -192,7 +193,6 @@
         var index = (id) ? id : 0;
         var workouts = self.program.workouts;
         var time = workouts[index].value;
-        currentTimer.actionTitle.textContent = workouts[index].title;
         var timer = setInterval(function () {
             currentTimer.time.textContent = (function () {    
                 var minutes = (function () {
@@ -212,9 +212,11 @@
                 }());
 
                 return minutes + ':' + seconds;
-            }());
-            time -= 1; 
-            if (time === 0) { 
+            }()); 
+            time -= 1;
+            if (time === 3) {
+                currentTimer.audio.play();
+            } else if (time === 0) { 
 
                 clearInterval(timer);
 
@@ -234,8 +236,9 @@
                     self.stop(timer);
                 } 
 
-            }
+            } 
         }, 1000);
+        currentTimer.actionTitle.textContent = workouts[index].title;
     };
 
     Timer.prototype.changeCircle = function (circle) {
