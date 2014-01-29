@@ -14,14 +14,17 @@
     var currentTimer = {
         el: document.querySelector('.current'),
         header: document.querySelector('.current__header'),
-        actionTitle: document.querySelector('.current__action-title-current'),
+        actionTitle: document.querySelector('.current__action-title'),
         time: document.querySelector('.current__time'),
         elapsed: document.querySelector('.current__elapsed-time'),
         remaining: document.querySelector('.current__remaining-time'),
         circle: document.querySelector('.current__circles-this'),
         circles: document.querySelector('.current__circles-all'),
-        start: document.querySelector('.current__start')
+        start: document.querySelector('.current__start'),
+        pause: document.querySelector('.current__pause'),
+        reset: document.querySelector('.current__reset')
     };
+
     var i = 1, j = 1;
 
     var timers = [];
@@ -114,6 +117,7 @@
         timerList.appendChild(elem);
 
         view.setAttribute('id', 'view-timer_' + id);
+        currentTimer.reset.setAttribute('id', 'reset-timer_' + id);
         currentTimer.start.setAttribute('id', 'start-timer_' + id);
     };
 
@@ -121,23 +125,72 @@
     Timer.prototype.load = function () {
         var self = this;
 
+        // Insert name of Timer
         currentTimer.header.textContent = this.name;
+        
+        // Insert
         currentTimer.circles.textContent = this.program.circles;
         currentTimer.circle.textContent = 1;
         currentTimer.actionTitle.textContent = this.program.workouts[0].title;
         currentTimer.time.textContent = (function () {
             var time = self.program.workouts[0].value;
-            if (time < 60 && time > 10) {
+            var seconds = (function () {
+                var result = time - (parseInt(time / 60) * 60);
+                if (result < 10) {
+                    return '0' + result;
+                }
+                return result;
+            }());
+            var minutes = parseInt(time / 60);
+            if (time < 3600 && time >= 600) {
+                return minutes + ':' + seconds;
+            } else if (time < 600 && time >= 60) {
+                return '0' + minutes + ':' + seconds;
+            } else if (time < 60 && time > 10) {
                 return '00:' + time;
             } else {
                 return '00:0' + time;
             }
         }());
-        
+
+        currentTimer.remaining.textContent = (function () {
+            var arr = self.program.workouts,
+                arrLen = arr.length,
+                allTime = 0;
+
+            for (var it = 0; it < arrLen; it++) {
+                allTime = allTime + arr[it].value;
+            }
+
+            var minutes = (function () {
+                var tmpMinutes = parseInt(allTime * self.program.circles / 60);
+                if (tmpMinutes < 10) {
+                    return '0' + tmpMinutes;
+                }
+                return tmpMinutes;
+            }());
+
+            var seconds = (function () {
+                var tmpSeconds = allTime * self.program.circles - parseInt(minutes) * 60;
+                if (tmpSeconds < 10) {
+                    return '0' + tmpSeconds;
+                }
+                return tmpSeconds;
+            }());
+    
+            return minutes + ':' + seconds;
+
+        }());
+
     };
 
-    Timer.prototype.start = function () {
-        var time = this.program.workouts[0].value;
+    Timer.prototype.start = function (id, circle) {
+        var self = this;
+        var circleid = (circle) ? circle : 1;
+        var index = (id) ? id : 0;
+        var workouts = self.program.workouts;
+        var time = workouts[index].value;
+        currentTimer.actionTitle.textContent = workouts[index].title;
         var timer = setInterval(function () {
             time -= 1; 
             currentTimer.time.textContent = (function () {
@@ -148,9 +201,32 @@
                 }
             }());
             if (time === 0) { 
-                clearInterval(timer); 
+
+                clearInterval(timer);
+
+                // if possible, change action
+                if (workouts[index + 1]) {
+                    console.log('Action change');
+                    self.start(index + 1, circleid);
+                } 
+                // Or changes circle, if possible
+                else if (circleid < self.program.circles) {
+                    console.log('Circle change');
+                    self.changeCircle(circleid + 1);
+                } 
+                // Or stop timer
+                else {
+                    console.log('Timer stop');
+                    self.stop(timer);
+                } 
+
             }
         }, 1000);
+    };
+
+    Timer.prototype.changeCircle = function (circle) {
+        currentTimer.circle.textContent = circle;
+        this.start(0, circle);
     };
 
     Timer.prototype.pause = function (id) {
@@ -159,6 +235,18 @@
 
     Timer.prototype.reset = function (id) {
 
+    };
+
+    Timer.prototype.stop = function (timer) {
+        timer = null;
+    };
+
+    Timer.prototype.changeElapsed = function () {
+
+    };
+
+    Timer.prototype.changeRemaining = function () {
+        
     };
 
     create.addEventListener('click', function (e) {
@@ -195,9 +283,6 @@
 
         tempTimer.pushToDOM(tempTimer.name, timers.length - 1);
 
-        console.log(timers);
-        console.log(timerItem);
-
     }, false);
 
     addWork.addEventListener('click', function (e) {
@@ -211,10 +296,13 @@
         timers[id].start();
     }, false);
 
-    view.addEventListener('click', function () {
+    function resetOrLoadData () {
         var id = this.getAttribute('id');
         id = id.substring(id.indexOf('_') + 1);
         timers[id].load();
-    }, false);
+    }
+
+    view.addEventListener('click', resetOrLoadData, false);
+    currentTimer.reset.addEventListener('click', resetOrLoadData, false);
 
 }());

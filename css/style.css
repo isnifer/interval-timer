@@ -18,19 +18,24 @@ h1,h2,h3,h4,h5,h6{margin:0 0 10px;line-height:1.2}
 .partials__input{overflow:hidden;padding:0 20px;width:200px}
 .partials__divider{width:452px;margin:10px 0;border-top:1px dashed #000}
 .partials__content{padding-bottom:10px}
-.current{width:400px;background:#2c3e50;padding:10px;border-radius:5px;display:block;}
+.current{width:498px;background:#2c3e50;padding:10px;border-radius:5px;display:block;}
 .current_visible{display:block}
 .current__header{font-size:3em;color:#f1c40f;line-height:1;text-align:center;padding:0 0 10px;font-weight:bold;text-shadow:1px 1px 2px #000;-webkit-font-smoothing:antialiased}
-.current__action-title{color:#fff;font-weight:bold;font-size:1.5em;text-align:center;}
-.current__action-title-current{color:#d35400}
+.current__action-title{color:#d35400;font-weight:bold;font-size:2em;text-align:center}
 .current__time{font-size:8em;text-align:center;font-weight:bold;color:#27ae60;margin:20px 0 10px;}
 .current__time_small{color:#c0392b}
-.current__circles{color:#fff;font-weight:bold;font-size:2em;padding-bottom:20px;text-align:center;}
-.current__circles-this{color:#c0392b}
-.current__circles-all{color:#27ae60}
+.current__circles{color:#fff;font-weight:bold;font-size:2em;padding-bottom:20px;text-align:center}
 .current__footer{text-align:center}
 .current__elapsed{width:calc(50% - 10px);display:inline-block;vertical-align:top;color:#fff;}
-.current__elapsed-time{color:#27ae60;font-size:2em}
+.current__elapsed-time{font-size:2em}
 .current__remaining{width:calc(50% - 10px);display:inline-block;color:#fff;}
-.current__remaining-time{color:#c0392b;font-size:2em}
+.current__remaining-time{color:#27ae60;font-size:2em}
 .current__footer-title{font-size:20px;line-height:1;margin:0 0 20px}
+.current__controls{padding:10px 0;text-align:center;}
+.current__controls button{margin:0 10px;padding:5px 0;width:100px;border:0;color:#fff;font-weight:bold}
+.current__start{background:#2ecc71;}
+.current__start:hover{background:#27ae60}
+.current__pause{background:#e67e22;}
+.current__pause:hover{background:#d35400}
+.current__reset{background:#9b59b6;}
+.current__reset:hover{background:#8e44ad}
