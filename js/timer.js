@@ -215,8 +215,9 @@
             }()); 
             time -= 1;
             if (time === 3) {
+                currentTimer.audio.currentTime = 0;
                 currentTimer.audio.play();
-            } else if (time === 0) { 
+            } else if (time <= 0) { 
 
                 clearInterval(timer);
 
