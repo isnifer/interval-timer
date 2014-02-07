@@ -75,9 +75,7 @@
                 tempElement.setAttribute('name', options.name + '_' + i);
             }
 
-            if (options.content) {
-                tempElement.textContent = options.content;
-            }
+            tempElement.textContent = (options.content) ? options.content : '';
 
             if (options.name === 'work') {
                 i += 1;
@@ -85,7 +83,7 @@
                 j += 1;
             }
 
-            return temp;
+            return tempElement;
 
         };
 
