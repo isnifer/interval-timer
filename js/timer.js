@@ -84,27 +84,23 @@
             }
 
             return tempElement;
-
         };
 
         var control = function (type) {
-            
             var label =  createControls({
-                tag: 'label',
-                classNames: ['partials__label']
-            });
-
-            var name = createControls({
-                tag: 'span',
-                classNames: ['partials__name'],
-                content: type + ' (s)'
-            });
-
-            var input = createControls({
-                tag: 'input',
-                classNames: ['partials__input', 'partials__' + type],
-                name: type
-            });
+                    tag: 'label',
+                    classNames: ['partials__label']
+                }),
+                name = createControls({
+                    tag: 'span',
+                    classNames: ['partials__name'],
+                    content: type + ' (s)'
+                }),
+                input = createControls({
+                    tag: 'input',
+                    classNames: ['partials__input', 'partials__' + type],
+                    name: type
+                });
 
             label.appendChild(name);
             label.appendChild(input);
@@ -117,18 +113,15 @@
 
         formUI.partialsForm.appendChild(element1);
         formUI.partialsForm.appendChild(element2);
-
     };
 
     Timer.prototype.pushToDOM = function (name, id) {
-        
         pushLocalTimerToList(id, name);
 
         formActions.load.setAttribute('id', 'view-timer_' + id);
         formActions.saveLocal.setAttribute('id', 'local-timer_' + id);
         currentTimer.reset.setAttribute('id', 'reset-timer_' + id);
         currentTimer.start.setAttribute('id', 'start-timer_' + id);
-
     };
 
     /*
@@ -257,11 +250,9 @@
 
         var timerName = document.querySelector('.partials__timer-user-name');
         timerName.textContent = document.querySelector('input[name="timer-name"]').value;
-
     }, false);
 
     formActions.save.addEventListener('click', function (e) {
-
         var works = document.getElementsByClassName('partials__work'),
             rests = document.getElementsByClassName('partials__rest'),
             tempTimer = new Timer ({
@@ -302,7 +293,6 @@
         if (localStorage) {
             formActions.saveLocal.disabled = false;
         }
-
     }, false);
 
     formActions.addWork.addEventListener('click', function (e) {
