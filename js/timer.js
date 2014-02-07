@@ -17,7 +17,7 @@
             el: document.querySelector('.current'),
             header: document.querySelector('.current__header'),
             actionTitle: document.querySelector('.current__action-title'),
-            time: document.querySelector('.current__time'),
+            actionTime: document.querySelector('.current__action-time'),
             elapsed: document.querySelector('.current__elapsed-time'),
             remaining: document.querySelector('.current__remaining-time'),
             circle: document.querySelector('.current__circles-this'),
@@ -133,6 +133,14 @@
 
     };
 
+    /*
+    * Function transform time to format 00:00
+    *
+    * @param {Number} minutes Integer value of minutes (s)
+    * @param {Number} seconds Rest of seconds (allTime - minutes) (s)
+    *
+    * @returns {String} value of time in 00:00 format
+    * */
     Timer.prototype.getHumanReadableTime = function (minutes, seconds) {
         var tempMinutes = (minutes < 10) ? '0' + minutes : minutes,
             tempSeconds = (seconds < 10) ? '0' + seconds : seconds;
@@ -142,44 +150,24 @@
 
     // Transform data from timer and load to DOM
     Timer.prototype.load = function () {
-
-        var self = this,
-            allTime = self.program.alltime,
+        var allTime = this.program.alltime,
             minutes = parseInt(allTime / 60),
-            seconds = allTime - parseInt(minutes) * 60;
+            seconds = allTime - parseInt(minutes) * 60,
+            firstActionTime = this.program.workouts[0].value,
+            firstActionMinutes = parseInt(firstActionTime / 60),
+            firstActionSeconds = firstActionTime - (firstActionMinutes) * 60;
 
+        // Insert name and remaining time of Timer
+        currentTimer.header.textContent = this.name;
         currentTimer.remaining.textContent = this.getHumanReadableTime(minutes, seconds);
 
-        // Insert name of Timer
-        currentTimer.header.textContent = this.name;
-        
-        // Insert
-        currentTimer.circles.textContent = this.program.circles;
-        currentTimer.circle.textContent = 1;
+        // Insert title and time of first action in Workout
         currentTimer.actionTitle.textContent = this.program.workouts[0].title;
-        currentTimer.time.textContent = (function () {
-
-            var time = self.program.workouts[0].value,
-                minutes = parseInt(time / 60),
-                seconds = (function () {
-                    var result = time - (parseInt(time / 60) * 60);
-
-                    result = (result < 10) ? '0' + result : result;
-
-                    return result;
-                }());
-
-            if (time < 3600 && time >= 600) {
-                return minutes + ':' + seconds;
-            } else if (time < 600 && time >= 60) {
-                return '0' + minutes + ':' + seconds;
-            } else if (time < 60 && time >= 10) {
-                return '00:' + time;
-            } else {
-                return '00:0' + time;
-            }
-
-        }());
+        currentTimer.actionTime.textContent = this.getHumanReadableTime(firstActionMinutes, firstActionSeconds);
+        
+        // Insert current circle value of workout and total value of it
+        currentTimer.circle.textContent = 1;
+        currentTimer.circles.textContent = this.program.circles;
     };
 
     Timer.prototype.start = function (id, circle) {
@@ -192,10 +180,7 @@
                 var minutes = parseInt(time / 60),
                     seconds = time - parseInt(minutes) * 60;
 
-                minutes = (minutes < 10) ? '0' + minutes : minutes;
-                seconds = (seconds < 10) ? '0' + seconds : seconds;
-
-                currentTimer.time.textContent = minutes + ':' + seconds;
+                currentTimer.actionTime.textContent = self.getHumanReadableTime(minutes, seconds);
 
                 time -= 1;
 
@@ -243,45 +228,25 @@
         timer = null;
     };
 
-    Timer.prototype.changeElapsed = function () {
+    Timer.prototype.changeOverallTime = function () {
         var time = 0,
             self = this,
             allTime = self.program.alltime,
-            elapsedTimer = setInterval(function () {
-                var minutes = parseInt(time / 60),
-                    seconds = time - parseInt(minutes) * 60;
+            overallTimer = setInterval(function () {
+                var elapsedMinutes = parseInt(time / 60),
+                    elapsedSeconds = time - parseInt(elapsedMinutes) * 60,
+                    remainingMinutes = parseInt(allTime / 60),
+                    remainingSeconds = allTime - parseInt(remainingMinutes) * 60;
 
-                minutes = (minutes < 10) ? '0' + minutes : minutes;
-                seconds = (seconds < 10) ? '0' + seconds : seconds;
-
-                currentTimer.elapsed.textContent = minutes + ':' + seconds;
-
-                if (time < allTime) {
-                    time += 1;
-                } else {
-                    clearInterval(elapsedTimer);
-                    elapsedTimer = null;
-                }
-            }, 1000);
-    };
-
-    Timer.prototype.changeRemaining = function () {
-        var self = this,
-            allTime = self.program.alltime,
-            remainingTimer = setInterval(function () {
-                var minutes = parseInt(allTime / 60),
-                    seconds = allTime - parseInt(minutes) * 60;
-
-                minutes = (minutes < 10) ? '0' + minutes : minutes;
-                seconds = (seconds < 10) ? '0' + seconds : seconds;
-
-                currentTimer.remaining.textContent = minutes + ':' + seconds;
+                currentTimer.elapsed.textContent = self.getHumanReadableTime(elapsedMinutes, elapsedSeconds);
+                currentTimer.remaining.textContent = self.getHumanReadableTime(remainingMinutes, remainingSeconds);
 
                 if (allTime !== 0) {
+                    time += 1;
                     allTime -= 1;
                 } else {
-                    clearInterval(remainingTimer);
-                    remainingTimer = null;
+                    clearInterval(overallTimer);
+                    overallTimer = null;
                 }
             }, 1000);
     };
@@ -289,8 +254,8 @@
     formActions.create.addEventListener('click', function (e) {
         e.preventDefault();
 
-        welcomeBlock.classList.add('controls_hidden');
-        partials.classList.add('partials_visible');
+        formUI.welcomeBlock.classList.add('controls_hidden');
+        formUI.partials.classList.add('partials_visible');
 
         var timerName = document.querySelector('.partials__timer-user-name');
         timerName.textContent = document.querySelector('input[name="timer-name"]').value;
@@ -351,15 +316,8 @@
         var id = this.getAttribute('id');
         id = id.substring(id.indexOf('_') + 1);
         timers[id].start();
-        timers[id].changeElapsed();
-        timers[id].changeRemaining();
+        timers[id].changeOverallTime();
     }, false);
-
-    function resetOrLoadData () {
-        var id = this.getAttribute('id');
-        id = id.substring(id.indexOf('_') + 1);
-        timers[id].load();
-    }
 
     formActions.load.addEventListener('click', resetOrLoadData, false);
     currentTimer.reset.addEventListener('click', resetOrLoadData, false);
@@ -406,6 +364,12 @@
             }
         }
     }());
+
+    function resetOrLoadData () {
+        var id = this.getAttribute('id');
+        id = id.substring(id.indexOf('_') + 1);
+        timers[id].load();
+    }
 
     function startFromList () {
         var id = this.id.substring(this.id.indexOf('_') + 1);

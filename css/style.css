@@ -27,8 +27,8 @@ h1,h2,h3,h4,h5,h6{margin:0 0 10px;line-height:1.2}
 .current_visible{display:block}
 .current__header{font-size:3em;color:#f1c40f;line-height:1;text-align:center;padding:0 0 10px;font-weight:bold;text-shadow:1px 1px 2px #000;-webkit-font-smoothing:antialiased}
 .current__action-title{color:#d35400;font-weight:bold;font-size:2em;text-align:center}
-.current__time{font-size:8em;text-align:center;font-weight:bold;color:#27ae60;margin:20px 0 10px;}
-.current__time_small{color:#c0392b}
+.current__action-time{font-size:8em;text-align:center;font-weight:bold;color:#27ae60;margin:20px 0 10px;}
+.current__action-time_small{color:#c0392b}
 .current__circles{color:#fff;font-weight:bold;font-size:2em;padding-bottom:20px;text-align:center}
 .current__footer{text-align:center}
 .current__elapsed{width:calc(50% - 10px);display:inline-block;vertical-align:top;color:#fff;}
