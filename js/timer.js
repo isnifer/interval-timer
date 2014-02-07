@@ -161,50 +161,65 @@
         currentTimer.circles.textContent = this.program.circles;
     };
 
-    Timer.prototype.start = function (id, circle) {
+    Timer.prototype.start = function () {
         var self = this,
-            circleid = (circle) ? circle : 1,
-            index = (id) ? id : 0,
+            startTime = 0,
+            circleid = 1,
+            index = 0,
+            allTime = self.program.alltime,
             workouts = self.program.workouts,
-            time = workouts[index].value,
-            timer = setInterval(function () {
-                var minutes = parseInt(time / 60),
-                    seconds = time - parseInt(minutes) * 60;
+            actionTime = workouts[index].value,
+            overallTimer = setInterval(function () {
+                var elapsedMinutes = parseInt(startTime / 60),
+                    elapsedSeconds = startTime - parseInt(elapsedMinutes) * 60,
+                    remainingMinutes = parseInt(allTime / 60),
+                    remainingSeconds = allTime - parseInt(remainingMinutes) * 60,
+                    actionMinutes = parseInt(actionTime / 60),
+                    actionSeconds = actionTime - parseInt(actionMinutes) * 60;
 
-                currentTimer.actionTime.textContent = self.getHumanReadableTime(minutes, seconds);
+                // Прошедшее
+                currentTimer.elapsed.textContent = self.getHumanReadableTime(elapsedMinutes, elapsedSeconds);
 
-                time -= 1;
+                // Оставшееся
+                currentTimer.remaining.textContent = self.getHumanReadableTime(remainingMinutes, remainingSeconds);
 
-                // Play audio in the end of action
-                if (time === 3) {
-                    currentTimer.audio.currentTime = 0;
-                    currentTimer.audio.play();
-                } else if (time <= 0) {
-                    clearInterval(timer);
+                // Текущего занятия
+                currentTimer.actionTime.textContent = self.getHumanReadableTime(actionMinutes, actionSeconds);
 
-                    // if possible, change action
-                    if (workouts[index + 1]) {
-                        self.start(index + 1, circleid);
+                actionTime -= 1;
+
+                if (allTime !== 0) {
+                    startTime += 1;
+                    allTime -= 1;
+
+                    // Play audio in the end of action
+                    if (actionTime === 3) {
+                        currentTimer.audio.currentTime = 0;
+                        currentTimer.audio.play();
+                    } else if (actionTime <= 0) {
+
+                        // if possible, change action
+                        if (workouts[index + 1]) {
+                            index += 1;
+                            actionTime = workouts[index].value;
+                        }
+
+                        // Or changes circle, if possible
+                        else if (circleid < self.program.circles) {
+                            circleid += 1;
+                            index = 0;
+                            currentTimer.circle.textContent = circleid;
+                            actionTime = workouts[index];
+                        }
+
+                        currentTimer.actionTitle.textContent = workouts[index].title;
                     }
 
-                    // Or changes circle, if possible
-                    else if (circleid < self.program.circles) {
-                        self.changeCircle(circleid + 1);
-                    }
-
-                    // Or stop timer
-                    else {
-                        self.stop(timer);
-                    }
+                } else {
+                    clearInterval(overallTimer);
+                    overallTimer = null;
                 }
             }, 1000);
-
-        currentTimer.actionTitle.textContent = workouts[index].title;
-    };
-
-    Timer.prototype.changeCircle = function (circle) {
-        currentTimer.circle.textContent = circle;
-        this.start(0, circle);
     };
 
     Timer.prototype.pause = function (id) {
@@ -217,29 +232,6 @@
 
     Timer.prototype.stop = function (timer) {
         timer = null;
-    };
-
-    Timer.prototype.changeOverallTime = function () {
-        var time = 0,
-            self = this,
-            allTime = self.program.alltime,
-            overallTimer = setInterval(function () {
-                var elapsedMinutes = parseInt(time / 60),
-                    elapsedSeconds = time - parseInt(elapsedMinutes) * 60,
-                    remainingMinutes = parseInt(allTime / 60),
-                    remainingSeconds = allTime - parseInt(remainingMinutes) * 60;
-
-                currentTimer.elapsed.textContent = self.getHumanReadableTime(elapsedMinutes, elapsedSeconds);
-                currentTimer.remaining.textContent = self.getHumanReadableTime(remainingMinutes, remainingSeconds);
-
-                if (allTime !== 0) {
-                    time += 1;
-                    allTime -= 1;
-                } else {
-                    clearInterval(overallTimer);
-                    overallTimer = null;
-                }
-            }, 1000);
     };
 
     formActions.create.addEventListener('click', function (e) {
@@ -304,7 +296,6 @@
         var id = this.getAttribute('id');
         id = id.substring(id.indexOf('_') + 1);
         timers[id].start();
-        timers[id].changeOverallTime();
     }, false);
 
     formActions.load.addEventListener('click', resetOrLoadData, false);
