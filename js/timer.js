@@ -24,7 +24,7 @@
             circles: document.querySelector('.current__circles-all'),
             start: document.querySelector('.current__start'),
             pause: document.querySelector('.current__pause'),
-            reset: document.querySelector('.current__reset'),
+            stop: document.querySelector('.current__stop'),
             audio: document.querySelector('.current__audio')
         },
         timerList = document.querySelector('.timers__list'),
@@ -33,7 +33,6 @@
         timers = [];
 
     function Timer (options) {
-        
         this.name = options.name || 'Press';
         this.program = (options.program) ? options.program : {};
         this.constructor = (constructor) ? constructor : options.constructor;
@@ -49,7 +48,6 @@
             return date.getDate() + '.' + months[date.getMonth()] + '.' + date.getFullYear();
         
         }());
-
     }
 
     Timer.prototype.createLocalTimer = function (options) {
@@ -120,7 +118,7 @@
 
         formActions.load.setAttribute('id', 'view-timer_' + id);
         formActions.saveLocal.setAttribute('id', 'local-timer_' + id);
-        currentTimer.reset.setAttribute('id', 'reset-timer_' + id);
+        currentTimer.stop.setAttribute('id', 'reset-timer_' + id);
         currentTimer.start.setAttribute('id', 'start-timer_' + id);
     };
 
@@ -169,7 +167,38 @@
             allTime = self.program.alltime,
             workouts = self.program.workouts,
             actionTime = workouts[index].value,
-            overallTimer = setInterval(function () {
+            OverallTimer = function (callback, delay) {
+                var timerId, 
+                    start,
+                    resume,
+                    remaining = delay;
+
+                this.pause = function () {
+                    window.clearInterval(timerId);
+                    remaining -= new Date() - start;
+                };
+
+                this.stop = function () {
+                    window.clearInterval(timerId);
+                    timerId = null;
+                    currentTimer.elapsed.textContent = '00:00';
+                };
+
+                resume = function () {
+                    start = new Date();
+                    timerId = window.setTimeout(function () {
+                        remaining = delay;
+                        resume();
+                        callback();
+                    }, remaining);
+                };
+
+                this.resume = resume;
+
+                this.resume();
+            };
+
+            this.timer = new OverallTimer(function () {
                 var elapsedMinutes = parseInt(startTime / 60),
                     elapsedSeconds = startTime - parseInt(elapsedMinutes) * 60,
                     remainingMinutes = parseInt(allTime / 60),
@@ -201,7 +230,6 @@
                         // if possible, change action
                         if (workouts[index + 1]) {
                             index += 1;
-                            actionTime = workouts[index].value;
                         }
 
                         // Or changes circle, if possible
@@ -209,24 +237,16 @@
                             circleid += 1;
                             index = 0;
                             currentTimer.circle.textContent = circleid;
-                            actionTime = workouts[index];
                         }
 
+                        actionTime = workouts[index].value;
                         currentTimer.actionTitle.textContent = workouts[index].title;
                     }
 
                 } else {
-                    clearInterval(overallTimer);
-                    overallTimer = null;
+                    self.timer.stop();
                 }
             }, 1000);
-    };
-
-    Timer.prototype.pause = function (id) {
-
-    };
-
-    Timer.prototype.reset = function (id) {
 
     };
 
@@ -298,8 +318,28 @@
         timers[id].start();
     }, false);
 
+    currentTimer.pause.addEventListener('click', function () {
+        var id = this.getAttribute('id');
+        id = id.substring(id.indexOf('_') + 1);
+        if (this.getAttribute('data-pause') !== 'true') {
+            timers[id].timer.pause();
+            this.setAttribute('data-pause', 'true');
+            this.textContent = 'Возобновить';
+        } else {
+            timers[id].timer.resume();
+            this.setAttribute('data-pause', 'false');
+            this.textContent = 'Пауза';
+        }
+    }, false);
+
+    currentTimer.stop.addEventListener('click', function () {
+        var id = this.getAttribute('id');
+        id = id.substring(id.indexOf('_') + 1);
+        timers[id].timer.stop();
+    }, false);
+
     formActions.load.addEventListener('click', resetOrLoadData, false);
-    currentTimer.reset.addEventListener('click', resetOrLoadData, false);
+    currentTimer.stop.addEventListener('click', resetOrLoadData, false);
 
     formActions.saveLocal.addEventListener('click', function () {
         var id = this.getAttribute('id'),
@@ -353,10 +393,10 @@
     function startFromList () {
         var id = this.id.substring(this.id.indexOf('_') + 1);
 
-        // Load
         timers[id].load();
 
-        currentTimer.reset.setAttribute('id', 'reset-timer_' + id);
+        currentTimer.stop.setAttribute('id', 'stop-timer_' + id);
+        currentTimer.pause.setAttribute('id', 'pause-timer_' + id);
         currentTimer.start.setAttribute('id', 'start-timer_' + id);
     }
 

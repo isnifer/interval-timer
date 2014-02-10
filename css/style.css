@@ -42,5 +42,5 @@ h1,h2,h3,h4,h5,h6{margin:0 0 10px;line-height:1.2}
 .current__start:hover{background:#27ae60}
 .current__pause{background:#e67e22;}
 .current__pause:hover{background:#d35400}
-.current__reset{background:#9b59b6;}
-.current__reset:hover{background:#8e44ad}
+.current__stop{background:#9b59b6;}
+.current__stop:hover{background:#8e44ad}
