@@ -1,6 +1,7 @@
 (function () {
 
     var formActions = {
+            createNewTimer: document.querySelector('.controls__view-form'),
             create: document.querySelector('.controls__create'),
             addWork: document.querySelector('.partials__add'),
             save: document.querySelector('.partials__save'),
@@ -9,6 +10,7 @@
             saveLocal: document.querySelector('.partials__local')
         },
         formUI = {
+            el: document.querySelector('.controls__form'),
             partials: document.querySelector('.partials'),
             partialsForm: document.querySelector('.partials__content'),
             welcomeBlock: document.querySelector('.controls__name-block')
@@ -66,7 +68,7 @@
                 k = 0;
 
             for (k; k < options.classNames.length; k++) {
-                tempElement.classList.add(options.classNames[i]);
+                tempElement.classList.add(options.classNames[k]);
             }
 
             if (options.name) {
@@ -359,6 +361,10 @@
         }
     }, false);
 
+    formActions.createNewTimer.addEventListener('click', function () {
+        formUI.el.classList.toggle('controls__form_state_hidden');
+    }, false);
+
     // Initialization of Timers
     var init = (function () {
         if (localStorage.timers) {
@@ -385,14 +391,16 @@
         timers[id].load();
     }
 
-    function startFromList () {
-        var id = this.getAttribute('data-timer');
+    function startFromList (e) {
+        if (e.target === this) {
+            var id = this.getAttribute('data-timer');
 
-        timers[id].load();
+            timers[id].load();
 
-        currentTimer.stop.setAttribute('data-timer', id);
-        currentTimer.pause.setAttribute('data-timer', id);
-        currentTimer.start.setAttribute('data-timer', id);
+            currentTimer.stop.setAttribute('data-timer', id);
+            currentTimer.pause.setAttribute('data-timer', id);
+            currentTimer.start.setAttribute('data-timer', id);
+        }
     }
 
     /*
@@ -406,7 +414,7 @@
 
         item.classList.add('timers__item');
         
-        itemName.setAttribute('data-timer', id);
+        item.setAttribute('data-timer', id);
         itemRemove.setAttribute('data-timer', id);
         
         itemName.classList.add('timers__name');
@@ -420,7 +428,7 @@
 
         timerList.appendChild(item);
 
-        itemName.addEventListener('click', startFromList, false);
+        item.addEventListener('click', startFromList, false);
         itemRemove.addEventListener('click', removeTimer, false);
     }
 
@@ -428,15 +436,17 @@
     * Procedure removes Timer from list and Local storage
     *
     */
-    function removeTimer () {
-        var id = this.getAttribute('data-timer'),
+    function removeTimer (e) {
+        if (e.target === this) {
+            var id = this.getAttribute('data-timer'),
             tmpArray = JSON.parse(localStorage.timers);
 
-        tmpArray.splice(id, 1);
-        localStorage.setItem('timers', JSON.stringify(tmpArray));
+            tmpArray.splice(id, 1);
+            localStorage.setItem('timers', JSON.stringify(tmpArray));
 
-        timers.splice(id, 1);
-        this.parentNode.remove();
+            timers.splice(id, 1);
+            this.parentNode.remove();
+        }
     }
 
 }());
