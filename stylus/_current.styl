@@ -1,0 +1,98 @@
+.current
+  width 498px
+  background #2c3e50
+  padding 10px
+  border-radius 5px
+  display block
+
+  &_visible
+    display block
+
+  &__header
+    font-size 3em
+    color #f1c40f
+    line-height 1
+    text-align center
+    padding 0 0 10px
+    font-weight bold
+    text-shadow 1px 1px 2px #000
+    -webkit-font-smoothing: antialiased
+
+  &__action-title
+    color #d35400
+    font-weight bold
+    font-size 2em
+    text-align center
+
+  &__action-time
+    font-size 8em
+    text-align center
+    font-weight bold
+    color #27ae60
+    margin 20px 0 10px
+
+    &_small
+      color #c0392b
+  
+  &__circles
+    color #fff
+    font-weight bold
+    font-size 2em
+    padding-bottom 20px
+    text-align center
+
+  &__footer
+    text-align center
+
+  &__elapsed
+    width calc(50% - 10px)
+    display inline-block
+    vertical-align top
+    color #fff
+
+    &-time
+      font-size 2em
+
+  &__remaining
+    width calc(50% - 10px)
+    display inline-block
+    color #fff
+
+    &-time
+      color #27ae60
+      font-size 2em
+
+  &__footer-title
+    font-size 20px
+    line-height 1
+    margin 0 0 20px
+
+  &__controls
+    padding 10px 0
+    text-align center
+
+    button
+      margin 0 10px
+      padding 5px 0
+      width 100px
+      border 0
+      color #fff
+      font-weight bold
+
+  &__start
+    background #2ecc71
+
+    &:hover
+      background #27ae60
+
+  &__pause
+    background #e67e22
+
+    &:hover
+      background #d35400
+
+  &__stop
+    background #9b59b6
+
+    &:hover
+      background #8e44ad

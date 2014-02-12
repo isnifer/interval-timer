@@ -1,0 +1,40 @@
+.timers
+  padding 20px 0
+
+  &__list
+    margin 0
+    padding 0
+    list-style none
+
+  &__item
+    position relative
+    font-weight bold
+    font-size 1.4em
+    
+  &__name
+    cursor pointer
+
+    &:hover
+      color #c0392b
+
+  &__remove
+    text-indent -9999px
+    display inline-block
+    width 16px
+    height 16px
+    cursor pointer
+    margin-left 10px
+    position relative
+
+    &:after
+      position absolute
+      top 8px
+      left 0
+      display block
+      width 16px
+      height 16px
+      content ""
+      background url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAgCAMAAAFbUDhoAAAA7VBMVEX///8sPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSu98rDdAAAATXRSTlMAAgIEBAUFBgYHBwgICQkKCgwMDQ0ODhERmpqbm6OjpaWurrCwsbGysrOztLS1tba2t7e6uru7vLy9vb6+wsLExMXFxsbHx8rKzMzNzeP/dD8AAAEvSURBVCjPZY7XUkJREARbQcFw7zkgoqJgzjmAAoKAWZn5/8/xAVGrnKet2amuBkAAGKAAQBHQgkAIXDJ49Id6XznQM2imeTjqGgPnwS/g2dYR6BqCVoC6pBxQkB5VB6pzwOUE+AaiK0DDdh4o2k9uALV54GqSn1SVQFOQSIsP2gUSSfsAfEoBoKOOlEBb5wQJMttAWPnFUHMKLUNql3veA1LbBwAM7QjQdddO4d4XRBuyO0CsAJn102RECuerE8CtpGaA0JR0DFDoSHp9lFT/nlJ4l6R+GFssfUqS9LAAwOKzpM2p3P64qkqXcwChLf3V/0l24ywdXfFibRK4s92KEFu2TwCKXdtvT7Yb31OKH7Y9iGPK8tC27V4JgPKL7a3p/MG4qtlX8wDx3q78t/gCyjM97SriDkIAAAAASUVORK5CYII=") no-repeat 0 0
+
+    &:hover:after
+      background-position 0 -16px
