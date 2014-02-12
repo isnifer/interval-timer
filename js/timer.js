@@ -116,10 +116,10 @@
     Timer.prototype.pushToDOM = function (name, id) {
         pushLocalTimerToList(id, name);
 
-        formActions.load.setAttribute('id', 'view-timer_' + id);
-        formActions.saveLocal.setAttribute('id', 'local-timer_' + id);
-        currentTimer.stop.setAttribute('id', 'reset-timer_' + id);
-        currentTimer.start.setAttribute('id', 'start-timer_' + id);
+        formActions.load.setAttribute('data-timer', id);
+        formActions.saveLocal.setAttribute('data-timer', id);
+        currentTimer.stop.setAttribute('data-timer', id);
+        currentTimer.start.setAttribute('data-timer', id);
     };
 
     /*
@@ -313,14 +313,13 @@
     }, false);
 
     currentTimer.start.addEventListener('click', function () {
-        var id = this.getAttribute('id');
-        id = id.substring(id.indexOf('_') + 1);
+        var id = this.getAttribute('data-timer');
         timers[id].start();
     }, false);
 
     currentTimer.pause.addEventListener('click', function () {
-        var id = this.getAttribute('id');
-        id = id.substring(id.indexOf('_') + 1);
+        var id = this.getAttribute('data-timer');
+
         if (this.getAttribute('data-pause') !== 'true') {
             timers[id].timer.pause();
             this.setAttribute('data-pause', 'true');
@@ -333,8 +332,7 @@
     }, false);
 
     currentTimer.stop.addEventListener('click', function () {
-        var id = this.getAttribute('id');
-        id = id.substring(id.indexOf('_') + 1);
+        var id = this.getAttribute('data-timer');
         timers[id].timer.stop();
     }, false);
 
@@ -342,15 +340,13 @@
     currentTimer.stop.addEventListener('click', resetOrLoadData, false);
 
     formActions.saveLocal.addEventListener('click', function () {
-        var id = this.getAttribute('id'),
+        var id = this.getAttribute('data-timer'),
             timer = {
                 name: timers[id].name,
                 program: timers[id].program
             },
             localTimers = [],
             tmpArray;
-
-        id = id.substring(id.indexOf('_') + 1);
 
         localTimers.push(JSON.stringify(timer));
 
@@ -385,38 +381,62 @@
     }());
 
     function resetOrLoadData () {
-        var id = this.getAttribute('id');
-        id = id.substring(id.indexOf('_') + 1);
+        var id = this.getAttribute('data-timer');
         timers[id].load();
     }
 
     function startFromList () {
-        var id = this.id.substring(this.id.indexOf('_') + 1);
+        var id = this.getAttribute('data-timer');
 
         timers[id].load();
 
-        currentTimer.stop.setAttribute('id', 'stop-timer_' + id);
-        currentTimer.pause.setAttribute('id', 'pause-timer_' + id);
-        currentTimer.start.setAttribute('id', 'start-timer_' + id);
+        currentTimer.stop.setAttribute('data-timer', id);
+        currentTimer.pause.setAttribute('data-timer', id);
+        currentTimer.start.setAttribute('data-timer', id);
     }
 
     /*
-    * Procedure create DOM elements of Timer's list
+    * Procedure creates DOM elements of Timer's list
     *
     * */
     function pushLocalTimerToList (id, name) {
         var item = document.createElement('li'),
-            itemName = document.createElement('span');
+            itemName = document.createElement('span'),
+            itemRemove = document.createElement('span');
 
         item.classList.add('timers__item');
-        item.setAttribute('id', 'timer_' + id);
+        
+        itemName.setAttribute('data-timer', id);
+        itemRemove.setAttribute('data-timer', id);
+        
         itemName.classList.add('timers__name');
+        itemRemove.classList.add('timers__remove');
+        
         itemName.textContent = name;
+        itemRemove.textContent = 'Remove';
+        
         item.appendChild(itemName);
+        item.appendChild(itemRemove);
 
         timerList.appendChild(item);
 
-        item.addEventListener('click', startFromList, false);
+        itemName.addEventListener('click', startFromList, false);
+        itemRemove.addEventListener('click', removeTimer, false);
+    }
+
+    /*
+    * Procedure removes Timer from list and Local storage
+    *
+    */
+    function removeTimer () {
+        var id = this.getAttribute('data-timer'),
+            tmpArray = JSON.parse(localStorage.timers);
+
+        tmpArray.splice(id, 1);
+        localStorage.setItem('timers', JSON.stringify(tmpArray));
+
+        timers.splice(id, 1);
+        this.parentNode.remove();
     }
 
 }());
