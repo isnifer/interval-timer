@@ -201,6 +201,7 @@
             };
 
             this.timer = new OverallTimer(function () {
+
                 var elapsedMinutes = parseInt(startTime / 60),
                     elapsedSeconds = startTime - parseInt(elapsedMinutes) * 60,
                     remainingMinutes = parseInt(allTime / 60),
@@ -217,12 +218,8 @@
                 // Текущего занятия
                 currentTimer.actionTime.textContent = self.getHumanReadableTime(actionMinutes, actionSeconds);
 
-                actionTime -= 1;
-
                 if (allTime !== 0) {
-                    startTime += 1;
-                    allTime -= 1;
-
+                    
                     // Play audio in the end of action
                     if (actionTime === 3) {
                         currentTimer.audio.currentTime = 0;
@@ -243,17 +240,19 @@
 
                         actionTime = workouts[index].value;
                         currentTimer.actionTitle.textContent = workouts[index].title;
+
                     }
+
+                    startTime += 1;
+                    allTime -= 1;
+                    actionTime -= 1;
 
                 } else {
                     self.timer.stop();
                 }
+
             }, 1000);
 
-    };
-
-    Timer.prototype.stop = function (timer) {
-        timer = null;
     };
 
     formActions.create.addEventListener('click', function (e) {

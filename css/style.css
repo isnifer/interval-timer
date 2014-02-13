@@ -29,7 +29,7 @@ h1,h2,h3,h4,h5,h6{margin:0 0 10px;line-height:1.2}
 .partials__btn.partials__save:hover{background:#2980b9}
 .partials__btn.partials__create-new{background:#9b59b6;}
 .partials__btn.partials__create-new:hover{background:#8e44ad}
-.partials__btn.partials__load{background:#8e44ad;}
+.partials__btn.partials__load{background:#e67e22;}
 .partials__btn.partials__load:hover{background:#d35400}
 .partials__btn.partials__load[disabled],.partials__btn.partials__load:hover[disabled]{background:#ecf0f1}
 .partials__btn.partials__local{background:#e74c3c;}
