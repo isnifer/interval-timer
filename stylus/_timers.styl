@@ -1,12 +1,12 @@
 .timers
-  margin 20px 0 0
   overflow hidden
+  margin 20px 0 0
   width 200px
   height 510px
+  border-left 1px solid #fff
   border-top-right-radius 5px
   border-bottom-right-radius 5px
   background #2c3e50
-  border-left 1px solid #fff
 
   &__list
     margin 0
@@ -15,11 +15,11 @@
 
   &__item
     position relative
+    padding 5px 0 5px 20px
+    border-bottom 1px solid #fff
     font-weight bold
     font-size 1.4em
-    padding 5px 0 5px 20px
     cursor pointer
-    border-bottom 1px solid #fff
 
     &:hover
       background #fff
@@ -27,12 +27,12 @@
 
   &__remove
     text-indent -9999px
+    position relative
     display inline-block
+    margin-left 10px
     width 16px
     height 16px
     cursor pointer
-    margin-left 10px
-    position relative
 
     &:after
       position absolute
@@ -41,8 +41,8 @@
       display block
       width 16px
       height 16px
-      content ""
       background url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAgCAMAAAFbUDhoAAAA7VBMVEX///8sPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSssPlDAOSu98rDdAAAATXRSTlMAAgIEBAUFBgYHBwgICQkKCgwMDQ0ODhERmpqbm6OjpaWurrCwsbGysrOztLS1tba2t7e6uru7vLy9vb6+wsLExMXFxsbHx8rKzMzNzeP/dD8AAAEvSURBVCjPZY7XUkJREARbQcFw7zkgoqJgzjmAAoKAWZn5/8/xAVGrnKet2amuBkAAGKAAQBHQgkAIXDJ49Id6XznQM2imeTjqGgPnwS/g2dYR6BqCVoC6pBxQkB5VB6pzwOUE+AaiK0DDdh4o2k9uALV54GqSn1SVQFOQSIsP2gUSSfsAfEoBoKOOlEBb5wQJMttAWPnFUHMKLUNql3veA1LbBwAM7QjQdddO4d4XRBuyO0CsAJn102RECuerE8CtpGaA0JR0DFDoSHp9lFT/nlJ4l6R+GFssfUqS9LAAwOKzpM2p3P64qkqXcwChLf3V/0l24ywdXfFibRK4s92KEFu2TwCKXdtvT7Yb31OKH7Y9iGPK8tC27V4JgPKL7a3p/MG4qtlX8wDx3q78t/gCyjM97SriDkIAAAAASUVORK5CYII=") no-repeat 0 0
+      content ""
 
     &:hover:after
       background-position 0 -16px
