@@ -408,21 +408,17 @@
     * */
     function pushLocalTimerToList (id, name) {
         var item = document.createElement('li'),
-            itemName = document.createElement('span'),
             itemRemove = document.createElement('span');
 
         item.classList.add('timers__item');
+        itemRemove.classList.add('timers__remove');
         
         item.setAttribute('data-timer', id);
         itemRemove.setAttribute('data-timer', id);
         
-        itemName.classList.add('timers__name');
-        itemRemove.classList.add('timers__remove');
-        
-        itemName.textContent = name;
+        item.textContent = name;
         itemRemove.textContent = 'Remove';
         
-        item.appendChild(itemName);
         item.appendChild(itemRemove);
 
         timerList.appendChild(item);
