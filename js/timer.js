@@ -143,10 +143,10 @@
     Timer.prototype.load = function () {
         var allTime = this.program.alltime,
             minutes = parseInt(allTime / 60),
-            seconds = allTime - parseInt(minutes) * 60,
+            seconds = allTime - minutes * 60,
             firstActionTime = this.program.workouts[0].value,
             firstActionMinutes = parseInt(firstActionTime / 60),
-            firstActionSeconds = firstActionTime - (firstActionMinutes) * 60;
+            firstActionSeconds = firstActionTime - firstActionMinutes * 60;
 
         // Insert name and remaining time of Timer
         currentTimer.header.textContent = this.name;
