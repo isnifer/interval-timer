@@ -52,16 +52,6 @@
         }());
     }
 
-    Timer.prototype.createLocalTimer = function (options) {
-
-        return new Timer ({
-            name: options.name,
-            program: options.program,
-            constructor: Timer
-        });
-
-    };
-
     Timer.prototype.add = function () {
         var createControls = function (options) {
             var tempElement = document.createElement(options.tag),
@@ -375,7 +365,7 @@
             for (k; k < localData.length; k++) {
                 var localItem = JSON.parse(localData[k]);
 
-                timers[timers.length] = Timer.prototype.createLocalTimer({
+                timers[timers.length] = new Timer ({
                     name: localItem.name,
                     program: localItem.program
                 });
@@ -443,5 +433,4 @@
             this.parentNode.remove();
         }
     }
-
 }());
