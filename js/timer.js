@@ -211,7 +211,7 @@
                 if (allTime !== 0) {
                     
                     // Play audio in the end of action
-                    if (actionTime === 3) {
+                    if (actionTime === 4) {
                         currentTimer.audio.currentTime = 0;
                         currentTimer.audio.play();
                     } else if (actionTime <= 0) {
