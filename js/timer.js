@@ -199,13 +199,13 @@
                     actionMinutes = parseInt(actionTime / 60),
                     actionSeconds = actionTime - parseInt(actionMinutes) * 60;
 
-                // Прошедшее
+                // Elapsed
                 currentTimer.elapsed.textContent = self.getHumanReadableTime(elapsedMinutes, elapsedSeconds);
 
-                // Оставшееся
+                // Remaining
                 currentTimer.remaining.textContent = self.getHumanReadableTime(remainingMinutes, remainingSeconds);
 
-                // Текущего занятия
+                // Current action time
                 currentTimer.actionTime.textContent = self.getHumanReadableTime(actionMinutes, actionSeconds);
 
                 if (allTime !== 0) {
@@ -245,6 +245,7 @@
 
     };
 
+    // Create timer
     formActions.create.addEventListener('click', function (e) {
         e.preventDefault();
 
@@ -255,6 +256,7 @@
         timerName.textContent = document.querySelector('input[name="timer-name"]').value;
     }, false);
 
+    // Save timer
     formActions.save.addEventListener('click', function (e) {
         var works = document.getElementsByClassName('partials__work'),
             rests = document.getElementsByClassName('partials__rest'),
@@ -298,16 +300,19 @@
         }
     }, false);
 
+    // Add circle
     formActions.addWork.addEventListener('click', function (e) {
         e.preventDefault();
         Timer.prototype.add();
     }, false);
 
+    // Start timer
     currentTimer.start.addEventListener('click', function () {
         var id = this.getAttribute('data-timer');
         timers[id].start();
     }, false);
 
+    // Pause timer
     currentTimer.pause.addEventListener('click', function () {
         var id = this.getAttribute('data-timer');
 
@@ -322,14 +327,19 @@
         }
     }, false);
 
+    // Stop timer
     currentTimer.stop.addEventListener('click', function () {
         var id = this.getAttribute('data-timer');
         timers[id].timer.stop();
     }, false);
 
+    // Load timer
     formActions.load.addEventListener('click', resetOrLoadData, false);
+
+    // Stop current timer
     currentTimer.stop.addEventListener('click', resetOrLoadData, false);
 
+    // Save timer to LocalStorage
     formActions.saveLocal.addEventListener('click', function () {
         var id = this.getAttribute('data-timer'),
             timer = {
@@ -349,6 +359,7 @@
             localStorage.setItem('timers', JSON.stringify(tmpArray));
         }
     }, false);
+
 
     formActions.createNewTimer.addEventListener('click', function () {
         formUI.el.classList.toggle('controls__form_state_hidden');
@@ -380,6 +391,7 @@
         timers[id].load();
     }
 
+    // Set timer current from list
     function startFromList (e) {
         if (e.target === this) {
             var id = this.getAttribute('data-timer');
@@ -394,7 +406,6 @@
 
     /*
     * Procedure creates DOM elements of Timer's list
-    *
     * */
     function pushLocalTimerToList (id, name) {
         var item = document.createElement('li'),
