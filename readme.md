@@ -20,4 +20,4 @@
 4. Переключение между интервалами таймера
 5. Минорные оптимизации
 
-**[Demo](http://kuznetsovanton.ru/games/timers/)** (updated at 12.02.2014 17:34:54)
+**[Demo](http://kuznetsovanton.ru/games/timers/)** (updated at 14.04.2014 13:15:00)
