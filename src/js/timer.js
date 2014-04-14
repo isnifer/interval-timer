@@ -35,8 +35,8 @@
         timers = [];
 
     function Timer (options) {
-        this.name = options.name || 'Press';
-        this.program = (options.program) ? options.program : {};
+        this.name = (options && options.name) ? options.name : 'Press';
+        this.program = (options && options.program) ? options.program : {};
         this.constructor = (constructor) ? constructor : options.constructor;
         this.date = (function () {
 
@@ -216,7 +216,7 @@
     /*
     * Class for manipulating timer
     *
-    * @params callback
+    * @param {function} callback
     * */
     function OverallTimer (callback, delay) {
         var timerId,
@@ -251,8 +251,6 @@
 
     // Create timer
     formActions.create.addEventListener('click', function (e) {
-        e.preventDefault();
-
         formUI.welcomeBlock.classList.add('controls_hidden');
         formUI.partials.classList.add('partials_visible');
 
@@ -299,16 +297,11 @@
 
         formActions.load.disabled = false;
 
-        if (localStorage) {
-            formActions.saveLocal.disabled = false;
-        }
+        formActions.saveLocal.disabled = !localStorage;
     }, false);
 
     // Add circle
-    formActions.addWork.addEventListener('click', function (e) {
-        e.preventDefault();
-        Timer.prototype.add();
-    }, false);
+    formActions.addWork.addEventListener('click', Timer.prototype.add, false);
 
     // Start timer
     currentTimer.start.addEventListener('click', function () {
@@ -406,8 +399,11 @@
         timers[id].load();
 
         currentTimer.stop.setAttribute('data-timer', id);
+        currentTimer.stop.disabled = false;
         currentTimer.pause.setAttribute('data-timer', id);
+        currentTimer.pause.disabled = false;
         currentTimer.start.setAttribute('data-timer', id);
+        currentTimer.start.disabled = false;
     }
 
     // Set timer current from list

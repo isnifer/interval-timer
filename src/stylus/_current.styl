@@ -83,20 +83,23 @@
       color #fff
       font-weight bold
 
+      &[disabled]
+        opacity 0.5
+
   &__start
     background #2ecc71
 
-    &:hover
+    &:hover, &[disabled], &:hover[disabled]
       background #27ae60
 
   &__pause
     background #e67e22
 
-    &:hover
+    &:hover, &[disabled], &:hover[disabled]
       background #d35400
 
   &__stop
     background #9b59b6
 
-    &:hover
+    &:hover, &[disabled], &:hover[disabled]
       background #8e44ad

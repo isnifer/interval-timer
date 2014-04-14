@@ -416,11 +416,17 @@ h6
     color: #fff;
     border: 0;
 }
+.current__controls button[disabled]
+{
+    opacity: .5;
+}
 .current__start
 {
     background: #2ecc71;
 }
-.current__start:hover
+.current__start:hover,
+.current__start[disabled],
+.current__start:hover[disabled]
 {
     background: #27ae60;
 }
@@ -428,7 +434,9 @@ h6
 {
     background: #e67e22;
 }
-.current__pause:hover
+.current__pause:hover,
+.current__pause[disabled],
+.current__pause:hover[disabled]
 {
     background: #d35400;
 }
@@ -436,7 +444,9 @@ h6
 {
     background: #9b59b6;
 }
-.current__stop:hover
+.current__stop:hover,
+.current__stop[disabled],
+.current__stop:hover[disabled]
 {
     background: #8e44ad;
 }
