@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="assets/css/normalize.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <link rel="icon" href="favicon.png">
     <title>Inverval Timer</title>
 </head>
@@ -22,8 +22,8 @@
                 
                 <!-- Название -->
                 <div class="controls__name-block">
-                    <input type="text" name="timer-name" class="controls__timer-name" />
-                    <button class="controls__create">Я выбрал имя</button>
+                    <label><input type="text" name="timer-name" class="controls__timer-name" /></label>
+                    <button type="button" class="controls__create">Я выбрал имя</button>
                 </div>
 
                 <!-- Содержимое таймера -->
@@ -106,7 +106,8 @@
 
     </div>
 
-    <script src="js/timer.js"></script>
-  
+    <script src="src/js/timer.js"></script>
+    <script src="//localhost:35729/livereload.js"></script>
+
 </body>
 </html>

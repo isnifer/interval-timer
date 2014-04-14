@@ -1,4 +1,4 @@
-(function () {
+(function (window, document, localStorage, undefined) {
 
     var formActions = {
             createNewTimer: document.querySelector('.controls__view-form'),
@@ -110,8 +110,6 @@
 
         formActions.load.setAttribute('data-timer', id);
         formActions.saveLocal.setAttribute('data-timer', id);
-        currentTimer.stop.setAttribute('data-timer', id);
-        currentTimer.start.setAttribute('data-timer', id);
     };
 
     /*
@@ -158,37 +156,7 @@
             index = 0,
             allTime = self.program.alltime,
             workouts = self.program.workouts,
-            actionTime = workouts[index].value,
-            OverallTimer = function (callback, delay) {
-                var timerId, 
-                    start,
-                    resume,
-                    remaining = delay;
-
-                this.pause = function () {
-                    window.clearInterval(timerId);
-                    remaining -= new Date() - start;
-                };
-
-                this.stop = function () {
-                    window.clearInterval(timerId);
-                    timerId = null;
-                    currentTimer.elapsed.textContent = '00:00';
-                };
-
-                resume = function () {
-                    start = new Date();
-                    timerId = window.setTimeout(function () {
-                        remaining = delay;
-                        resume();
-                        callback();
-                    }, remaining);
-                };
-
-                this.resume = resume;
-
-                this.resume();
-            };
+            actionTime = workouts[index].value;
 
             this.timer = new OverallTimer(function () {
 
@@ -241,9 +209,45 @@
                     self.timer.stop();
                 }
 
-            }, 1000);
+            }, 1000, currentTimer);
 
     };
+
+    /*
+    * Class for manipulating timer
+    *
+    * @params callback
+    * */
+    function OverallTimer (callback, delay) {
+        var timerId,
+            start,
+            resume,
+            remaining = delay;
+
+        this.pause = function () {
+            window.clearInterval(timerId);
+            remaining -= new Date() - start;
+        };
+
+        this.stop = function () {
+            window.clearInterval(timerId);
+            timerId = null;
+            currentTimer.elapsed.textContent = '00:00';
+        };
+
+        resume = function () {
+            start = new Date();
+            timerId = window.setTimeout(function () {
+                remaining = delay;
+                resume();
+                callback();
+            }, remaining);
+        };
+
+        this.resume = resume;
+
+        this.resume();
+    }
 
     // Create timer
     formActions.create.addEventListener('click', function (e) {
@@ -316,14 +320,16 @@
     currentTimer.pause.addEventListener('click', function () {
         var id = this.getAttribute('data-timer');
 
-        if (this.getAttribute('data-pause') !== 'true') {
+        if (!this.getAttribute('data-pause')) {
             timers[id].timer.pause();
             this.setAttribute('data-pause', 'true');
             this.textContent = 'Возобновить';
+            currentTimer.start.disabled = true;
         } else {
             timers[id].timer.resume();
             this.setAttribute('data-pause', 'false');
             this.textContent = 'Пауза';
+            currentTimer.start.disabled = false;
         }
     }, false);
 
@@ -367,7 +373,7 @@
 
     // Initialization of Timers
     var init = (function () {
-        if (localStorage.timers) {
+        if (localStorage && localStorage.timers) {
             var localData = localStorage.timers,
                 k = 0;
             
@@ -386,21 +392,28 @@
         }
     }());
 
-    function resetOrLoadData () {
-        var id = this.getAttribute('data-timer');
+    function resetOrLoadData (e) {
+
+        // Stop current timer
+        var previousTimerId = currentTimer.stop.getAttribute('data-timer');
+
+        if (previousTimerId && timers[previousTimerId].timer) {
+            timers[previousTimerId].timer.stop();
+        }
+
+        // Load new timer
+        var id = e.target.getAttribute('data-timer');
         timers[id].load();
+
+        currentTimer.stop.setAttribute('data-timer', id);
+        currentTimer.pause.setAttribute('data-timer', id);
+        currentTimer.start.setAttribute('data-timer', id);
     }
 
     // Set timer current from list
     function startFromList (e) {
         if (e.target === this) {
-            var id = this.getAttribute('data-timer');
-
-            timers[id].load();
-
-            currentTimer.stop.setAttribute('data-timer', id);
-            currentTimer.pause.setAttribute('data-timer', id);
-            currentTimer.start.setAttribute('data-timer', id);
+            resetOrLoadData(e);
         }
     }
 
@@ -430,8 +443,7 @@
 
     /*
     * Procedure removes Timer from list and Local storage
-    *
-    */
+    * */
     function removeTimer (e) {
         if (e.target === this) {
             var id = this.getAttribute('data-timer'),
@@ -444,4 +456,4 @@
             this.parentNode.remove();
         }
     }
-}());
+}(window, window.document, window.localStorage));
