@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="assets/css/normalize.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="icon" href="favicon.png">
-    <title>Inverval Timer</title>
+    <title>Interval Timer</title>
 </head>
 <body>
 
@@ -28,17 +28,13 @@
 
                 <!-- Содержимое таймера -->
                 <div class="partials">
-                    <p class="partials__timer-name">
-                        Таймер: <span class="partials__timer-user-name"></span>
-                    </p>
+                    <p class="partials__timer-name">Таймер: <span class="partials__timer-user-name"></span></p>
                     <div class="partials__content">
                         <label class="partials__label">
                             <span class="partials__name">Количество кругов: </span>
                             <input type="text" name="circle-num" class="partials__input partials__circle">
                         </label>
-                        <div class="partials__divider">
-                            Содержимое круга:
-                        </div>
+                        <div class="partials__divider">Содержимое круга:</div>
                         <label class="partials__label">
                             <span class="partials__name">work (s)</span>
                             <input type="text" name="work_0" class="partials__input partials__work">
@@ -48,11 +44,11 @@
                             <input type="text" name="rest_0" class="partials__input partials__rest">
                         </label>
                     </div>
-                    <button class="partials__btn partials__add">Добавить</button>
-                    <button class="partials__btn partials__save">Сохранить таймер</button>
-                    <button class="partials__btn partials__create-new">Создать новый</button>
-                    <button class="partials__btn partials__load" disabled="true">Посмотреть</button>
-                    <button class="partials__btn partials__local" disabled="true">Сохранить локально</button>
+                    <button type="button" class="partials__btn partials__add">Добавить</button>
+                    <button type="button" class="partials__btn partials__save">Сохранить таймер</button>
+                    <button type="button" class="partials__btn partials__create-new">Создать новый</button>
+                    <button type="button" class="partials__btn partials__load" disabled>Посмотреть</button>
+                    <button type="button" class="partials__btn partials__local" disabled>Сохранить локально</button>
                 </div>
 
             </div>
@@ -60,41 +56,27 @@
 
         <!-- Текущий таймер -->
         <div class="current">
-            <header class="current__header">
-                Название таймера
-            </header>
-            <div class="current__action-title">
-                Действие
-            </div>
-            <div class="current__action-time">
-                00:00
-            </div>
+            <header class="current__header">Название таймера</header>
+            <div class="current__action-title">Действие</div>
+            <div class="current__action-time">00:00</div>
             <div class="current__circles">
                 <span class="current__circles-this">Текущий круг</span>&nbsp;/
                 <span class="current__circles-all">Всего кругов</span>
             </div>
             <div class="current__footer">
                 <div class="current__elapsed">
-                    <p class="current__footer-title">
-                        Прошло
-                    </p>
-                    <div class="current__elapsed-time">
-                        00:00
-                    </div>
+                    <p class="current__footer-title">Прошло</p>
+                    <div class="current__elapsed-time">00:00</div>
                 </div>
                 <div class="current__remaining">
-                    <p class="current__footer-title">
-                        Осталось
-                    </p>
-                    <div class="current__remaining-time">
-                        00:00
-                    </div>
+                    <p class="current__footer-title">Осталось</p>
+                    <div class="current__remaining-time">00:00</div>
                 </div>
             </div>
             <div class="current__controls">
-                <button class="current__start">Пуск</button>
-                <button class="current__pause">Пауза</button>
-                <button class="current__stop">Стоп</button>
+                <button type="button" class="current__start">Пуск</button>
+                <button type="button" class="current__pause">Пауза</button>
+                <button type="button" class="current__stop">Стоп</button>
             </div>
             <audio src="audio/timer.mp3" class="current__audio"></audio>  
         </div>
