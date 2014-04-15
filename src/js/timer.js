@@ -32,18 +32,25 @@
         timerList = document.querySelector('.timers__list'),
         i = 1,
         j = 1,
-        timers = [];
+        timers = [],
+        flags = {
+            currentTimer: 0,
+            onPause: false
+        },
+        setFlags = function (type) {
+            currentTimer.start.disabled = type; 
+            currentTimer.pause.disabled = currentTimer.stop.disabled = !type;
+        };
 
     function Timer (options) {
         this.name = (options && options.name) ? options.name : 'Press';
         this.program = (options && options.program) ? options.program : {};
-        this.constructor = (constructor) ? constructor : options.constructor;
         this.date = (function () {
 
             var date = new Date();
             var months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 
-            if (options.date) {
+            if (options && options.date) {
                 return options.date;
             }
 
@@ -302,25 +309,20 @@
 
     // Start current timer
     function startCurrentTimer () {
-        var id = this.getAttribute('data-timer');
-        timers[id].start();
+        timers[flags.currentTimer].start();
+        setFlags(true);
     }
 
     // Set Pause or Resume current timer
     function setPauseResumeCurrentTimer () {
-        var id = this.getAttribute('data-timer');
-
-        if (!this.getAttribute('data-pause')) {
-            timers[id].timer.pause();
-            this.setAttribute('data-pause', 'true');
+        if (!flags.onPause) {
+            timers[flags.currentTimer].timer.pause();
             this.textContent = 'Возобновить';
-            currentTimer.start.disabled = true;
         } else {
-            timers[id].timer.resume();
-            this.setAttribute('data-pause', 'false');
+            timers[flags.currentTimer].timer.resume();
             this.textContent = 'Пауза';
-            currentTimer.start.disabled = false;
         }
+        flags.onPause = !flags.onPause;
     }
 
     // Open new Timer form
@@ -330,17 +332,17 @@
 
     // Stop current timer
     function stopCurrentTimer () {
-        var id = this.getAttribute('data-timer');
-        timers[id].timer.stop();
-        timers[id].load();
+        timers[flags.currentTimer].timer.stop();
+        timers[flags.currentTimer].load();
+        setFlags(false);
+        currentTimer.pause.textContent = 'Пауза';
     }
 
     // Save timer to localStorage
     function saveToLocalStorage () {
-        var id = this.getAttribute('data-timer'),
-            timer = {
-                name: timers[id].name,
-                program: timers[id].program
+        var timer = {
+                name: timers[flags.currentTimer].name,
+                program: timers[flags.currentTimer].program
             },
             localTimers = [],
             tmpArray;
@@ -360,22 +362,16 @@
     function resetOrLoadData (e) {
 
         // Stop current timer
-        var previousTimerId = currentTimer.stop.getAttribute('data-timer');
-
-        if (previousTimerId && timers[previousTimerId].timer) {
-            timers[previousTimerId].timer.stop();
+        if (flags.currentTimer && timers[flags.currentTimer].timer) {
+            timers[flags.currentTimer].timer.stop();
         }
 
         // Load new timer
         var id = e.target.getAttribute('data-timer');
         timers[id].load();
 
-        currentTimer.stop.setAttribute('data-timer', id);
-        currentTimer.stop.disabled = false;
-        currentTimer.pause.setAttribute('data-timer', id);
-        currentTimer.pause.disabled = false;
-        currentTimer.start.setAttribute('data-timer', id);
-        currentTimer.start.disabled = false;
+        flags.currentTimer = id;
+        setFlags(false);
     }
 
     // Set timer current from list
