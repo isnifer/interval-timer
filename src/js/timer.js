@@ -205,7 +205,6 @@
 
                         actionTime = workouts[index].value;
                         currentTimer.actionTitle.textContent = workouts[index].title;
-
                     }
 
                     startTime += 1;
@@ -216,7 +215,7 @@
                     self.timer.stop();
                 }
 
-            }, 1000, currentTimer);
+            }, 1000);
 
     };
 
@@ -284,18 +283,9 @@
             tempTimer.program.workouts.push({"title": "rest", "value": parseInt(rests[k].value)});
         }
 
-        tempTimer.program.alltime = (function () {
-            var arr = tempTimer.program.workouts,
-                arrLen = arr.length,
-                allTime = 0,
-                t = 0;
-
-            for (t; t < arrLen; t++) {
-                allTime = allTime + arr[t].value;
-            }
-
-            return allTime * tempTimer.program.circles;
-        }());
+        tempTimer.program.alltime = tempTimer.program.workouts.reduce(function (memo, current) {
+            return memo + current.value * tempTimer.program.circles;
+        }, 0);
 
         // Push new Timer to Timer's Array
         timers.push(tempTimer);
@@ -303,7 +293,6 @@
         tempTimer.pushToDOM(tempTimer.name, timers.length - 1);
 
         formActions.load.disabled = false;
-
         formActions.saveLocal.disabled = !localStorage;
     }
 
@@ -340,9 +329,10 @@
 
     // Save timer to localStorage
     function saveToLocalStorage () {
-        var timer = {
-                name: timers[flags.currentTimer].name,
-                program: timers[flags.currentTimer].program
+        var id = this.getAttribute('data-timer'),
+            timer = {
+                name: timers[id].name,
+                program: timers[id].program
             },
             localTimers = [],
             tmpArray;
@@ -381,6 +371,21 @@
         }
     }
 
+    // Procedure removes Timer from list and Local storage
+    function removeTimer (e) {
+        if (e.target === this) {
+            var id = this.getAttribute('data-timer'),
+            tmpArray = JSON.parse(localStorage.timers);
+
+            tmpArray.splice(id, 1);
+            localStorage.setItem('timers', JSON.stringify(tmpArray));
+
+            timers.splice(id, 1);
+            this.parentNode.remove();
+        }
+    }
+
+
     // Procedure creates DOM elements of Timer's list
     function pushLocalTimerToList (id, name) {
         var item = document.createElement('li'),
@@ -401,20 +406,6 @@
 
         item.addEventListener('click', startFromList, false);
         itemRemove.addEventListener('click', removeTimer, false);
-    }
-
-    // Procedure removes Timer from list and Local storage
-    function removeTimer (e) {
-        if (e.target === this) {
-            var id = this.getAttribute('data-timer'),
-            tmpArray = JSON.parse(localStorage.timers);
-
-            tmpArray.splice(id, 1);
-            localStorage.setItem('timers', JSON.stringify(tmpArray));
-
-            timers.splice(id, 1);
-            this.parentNode.remove();
-        }
     }
 
     /* EVENT HANDLERS */
@@ -443,7 +434,7 @@
     // Save timer to LocalStorage
     formActions.saveLocal.addEventListener('click', saveToLocalStorage, false);
 
-    // Open form for new timer creation
+    // id for new timer creation
     formActions.chooseName.addEventListener('click', chooseNewTimerName, false);
 
     // Initialization of Timers
