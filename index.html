@@ -9,88 +9,11 @@
 </head>
 <body>
 
-    <div class="page">
-        
-        <h2 class="page__title">Интервальный таймер</h2>
-
-        <div class="controls">
-
-            <p class="controls__view-form">Создать новый</p>
-            
-            <!-- Форма создания нового таймера -->
-            <div class="controls__form controls__form_state_hidden">
-                
-                <!-- Название -->
-                <div class="controls__name-block">
-                    <label><input type="text" name="timer-name" class="controls__timer-name" /></label>
-                    <button type="button" class="controls__create">Я выбрал имя</button>
-                </div>
-
-                <!-- Содержимое таймера -->
-                <div class="partials">
-                    <p class="partials__timer-name">Таймер: <span class="partials__timer-user-name"></span></p>
-                    <div class="partials__content">
-                        <label class="partials__label">
-                            <span class="partials__name">Количество кругов: </span>
-                            <input type="text" name="circle-num" class="partials__input partials__circle">
-                        </label>
-                        <div class="partials__divider">Содержимое круга:</div>
-                        <label class="partials__label">
-                            <span class="partials__name">work (s)</span>
-                            <input type="text" name="work_0" class="partials__input partials__work">
-                        </label>
-                        <label class="partials__label">
-                            <span class="partials__name">rest (s)</span>
-                            <input type="text" name="rest_0" class="partials__input partials__rest">
-                        </label>
-                    </div>
-                    <button type="button" class="partials__btn partials__add">Добавить</button>
-                    <button type="button" class="partials__btn partials__save">Сохранить таймер</button>
-                    <button type="button" class="partials__btn partials__create-new">Создать новый</button>
-                    <button type="button" class="partials__btn partials__load" disabled>Посмотреть</button>
-                    <button type="button" class="partials__btn partials__local" disabled>Сохранить локально</button>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Текущий таймер -->
-        <div class="current">
-            <header class="current__header">Название таймера</header>
-            <div class="current__action-title">Действие</div>
-            <div class="current__action-time">00:00</div>
-            <div class="current__circles">
-                <span class="current__circles-this">Текущий круг</span>&nbsp;/
-                <span class="current__circles-all">Всего кругов</span>
-            </div>
-            <div class="current__footer">
-                <div class="current__elapsed">
-                    <p class="current__footer-title">Прошло</p>
-                    <div class="current__elapsed-time">00:00</div>
-                </div>
-                <div class="current__remaining">
-                    <p class="current__footer-title">Осталось</p>
-                    <div class="current__remaining-time">00:00</div>
-                </div>
-            </div>
-            <div class="current__controls">
-                <button type="button" class="current__start" disabled>Пуск</button>
-                <button type="button" class="current__pause" disabled>Пауза</button>
-                <button type="button" class="current__stop" disabled>Стоп</button>
-            </div>
-            <audio src="audio/timer.mp3" class="current__audio"></audio>  
-        </div>
-
-        <!-- Список таймеров -->
-        <div class="timers">
-            <ul class="timers__list"></ul>
-        </div>
-
-    </div>
+    <div class="page"></div>
 
     <script src="assets/js/react.js"></script>
-    <script src="src/js/timer.js"></script>
-    <script src="src/js/app/timer.js"></script>
+    <script src="assets/js/timer.js"></script>
+    <!-- <script src="assets/js/timer.min.js"></script> -->
     <script src="//localhost:35729/livereload.js"></script>
 
 </body>
